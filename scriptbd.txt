@@ -1,0 +1,11 @@
+create table users(
+id_user serial PRIMARY key,
+user_name varchar(255),
+post varchar(255)
+)
+
+create table adminBD(
+id_userBD serial PRIMARY key,
+user_name varchar(255),
+password varchar(255)
+)
