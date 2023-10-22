@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Joti+One&family=Roboto&display=swap');
+
 .formAuth{
     margin: 0px auto;
     padding: 70px;
@@ -6,4 +8,18 @@
 
 .formAuthTitle{
     text-align: center;
+}
+
+.buc{
+    color: #000;
+    font-family: Joti One;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration: none;
+}
+
+body{
+    background: #000;
 }
