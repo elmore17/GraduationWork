@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request, url_for, flash, redirect, session
+from flask import Flask, render_template, request, url_for, flash, redirect, session, jsonify
+from flask_cors import CORS
 import psycopg2
 
 
 app = Flask(__name__)
+CORS(app)
 app.config['SECRET_KEY'] = 'your secret key'
 
 conn = psycopg2.connect(database="kisprod",  
@@ -21,14 +23,14 @@ def login():
 @app.route('/login', methods=['POST'])
 def login_post():
     if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+        username = request.json.get('username')
+        password = request.json.get('password')
         cursor.execute(('''select password from adminbd where user_name='{}';''').format(username))
         passwords = cursor.fetchall()
         if passwords[0][0] == password:
-            return redirect(url_for('mainpage'))
+            return jsonify({'message': 'Logged in successfully'})
         else:
-            return redirect(url_for('login'))
+            return jsonify({'message': 'Logged false'})
 
 @app.route('/mainpage')
 def mainpage():
