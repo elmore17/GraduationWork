@@ -15,11 +15,6 @@ conn = psycopg2.connect(database="kisprod",
 
 cursor = conn.cursor()
 
-@app.route('/')
-@app.route('/login')
-def login():
-    return render_template('formauth.html')
-
 @app.route('/login', methods=['POST'])
 def login_post():
     if request.method == 'POST':
@@ -28,18 +23,9 @@ def login_post():
         cursor.execute(('''select password from adminbd where user_name='{}';''').format(username))
         passwords = cursor.fetchall()
         if passwords[0][0] == password:
-            return jsonify({'message': 'Logged in successfully'})
+            return jsonify({'message': 'Successfully'})
         else:
-            return jsonify({'message': 'Logged false'})
-
-@app.route('/mainpage')
-def mainpage():
-    return render_template('main_page.html')
-
-@app.route("/logout")
-def logout():
-    session.pop('username', None)
-    return redirect(url_for('login'))
+            return jsonify({'message': 'Error'})
     
 
 app.run(host='0.0.0.0', port=83)
