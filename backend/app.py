@@ -26,6 +26,33 @@ def login_post():
             return jsonify({'message': 'Successfully'})
         else:
             return jsonify({'message': 'Error'})
+        
+@app.route('/addusers', methods=['POST'])
+def add_users():
+    if request.method == 'POST':
+        user_name = request.json.get('user_name')
+        post = request.json.get('post')
+        cursor.execute('SELECT * FROM users WHERE user_name = %s', (user_name,))
+        existing_user = cursor.fetchone()
+        if existing_user:
+            return jsonify({'message': 'User already exists'}), 400
+        cursor.execute('INSERT INTO users (user_name, post) VALUES (%s, %s)', (user_name, post))
+        conn.commit()
+        return jsonify({'message': 'Successfully'})
+    
+@app.route('/getusers', methods=['GET'])
+def get_users():
+    cursor.execute('SELECT * FROM users')
+    users = cursor.fetchall()
+    user_list = []
+    for user in users:
+        user_dict = {
+            'id': user[0],
+            'user_name': user[1],
+            'post': user[2]
+        }
+        user_list.append(user_dict)
+    return jsonify({'users': user_list})
     
 
 app.run(host='0.0.0.0', port=83)
