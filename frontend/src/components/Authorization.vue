@@ -18,7 +18,7 @@ export default{
             axios.post('http://127.0.0.1:83/login',data)
                 .then(response => {
                     if (response.data.message == "Successfully"){
-                        this.$router.push('/home');
+                        window.location.href = '/home';
                     }else{
                         console.log("Error");
                     }
