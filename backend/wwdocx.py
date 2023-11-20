@@ -50,6 +50,26 @@ context['student'] = dataConst['student']
 context['studentU'] = dataConst['studentU']
 context['kval'] = dataConst['kval']
 context['spec'] = dataConst['spec']
+context['predgos'] = 'Баранчиков Алексей Иванович'
+context['score'] = 'отлично'
+if (context['score'] == 'удовлетворительно'):
+    context['haracteransver1'] = 'Студент показал достаточный уровень подготовки. Недостаточно глубоко изучил и' 
+    context['haracteransver2'] = 'проанализировал предметную область. При защите ВКР студент проявил неуверенность,'
+    context['haracteransver3'] = 'показал слабое знание вопросов темы, не дал полного аргументированного ответа на'
+    context['haracteransver4'] = 'заданные вопросы.'
+elif (context['score'] == 'отлично'):
+    context['haracteransver1'] = 'Студент показал высокий уровень подготовки и глубокие системные знания,' 
+    context['haracteransver2'] = 'свободно оперирует данными исследования, дал развернутые и полные ответы на'
+    context['haracteransver3'] = 'поставленные вопросы'
+elif (context['score'] == 'хорошо'):
+    context['haracteransver1'] = 'Студент показал высокий уровень подготовки и глубокие системные знания,' 
+    context['haracteransver2'] = 'но на дополнительные вопросы комиссии были даны неполные ответы.'
+context['ekzscore'] = 'не предусмотрен учебным планом'
+context['nodata'] = '–'
+context['data'] = '14.06.2023'
+context['scorediplom'] = 'без отличия'
+context['predgossokr'] = 'Баранчиков А.И.'
+context['sekretgossokr'] = 'Трохаченкова Н.Н.'
 doc = DocxTemplate('shablon.docx')
 doc.render(context)
 doc.save("generated_docx.docx")
