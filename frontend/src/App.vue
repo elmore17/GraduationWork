@@ -6,5 +6,5 @@
 
 <script setup>
   import Auth from './components/Authorization.vue'
-  import Home from './components/Home.vue'
+  import Main from './components/Main.vue'
 </script>

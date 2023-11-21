@@ -53,6 +53,15 @@ def get_users():
         }
         user_list.append(user_dict)
     return jsonify({'users': user_list})
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    try:
+        uploaded_file = request.files['file']
+        uploaded_file.save('/Users/danilegorkin/Documents/KISprod/backend/files_upload/' + uploaded_file.filename)
+        return jsonify({'status': 'success', 'message': 'File uploaded successfully'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)})
     
 
 app.run(host='0.0.0.0', port=83)
