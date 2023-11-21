@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, url_for, flash, redirect, session, jsonify
 from flask_cors import CORS
 import psycopg2
+from pathlib import Path
+from wwdocx import read_docx, create_draft
 
 
 app = Flask(__name__)
@@ -58,10 +60,15 @@ def get_users():
 def upload_file():
     try:
         uploaded_file = request.files['file']
-        uploaded_file.save('/Users/danilegorkin/Documents/KISprod/backend/files_upload/' + uploaded_file.filename)
-        return jsonify({'status': 'success', 'message': 'File uploaded successfully'})
+        downloads_directory = Path.home() / 'Downloads'
+        file_path = downloads_directory / uploaded_file.filename
+        uploaded_file.save(file_path)
+        output_json = 'output.json'
+        read_docx(file_path, output_json)
+        create_draft(output_json)
+        return {'status': 'success', 'message': 'File uploaded successfully'}
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return {'status': 'error', 'message': str(e)}
     
 
 app.run(host='0.0.0.0', port=83)
