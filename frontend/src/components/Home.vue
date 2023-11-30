@@ -25,7 +25,7 @@
                         <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                         </svg>
                     </div>
-                    <input v-model="selectedDate" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="14/10/2023" id="datepickerId">
+                    <input ref="datepicker1" datepicker type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Выберете дату">
                 </div>
             </div>
             <div class="max-w-screen-xl flex flex-wrap items-baseline mx-auto p-4 mt-5">
@@ -83,30 +83,35 @@
                     </div>
                 </div>
             </div>
-            <div class="max-w-screen-xl flex flex-wrap items-baseline mx-auto p-4 mt-5">
-                <h5 class="mb-4 mr-4">Оценка за ВКР</h5>
-                <div class="relative max-w-sm">
-                    <select id="score" v-model="score" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option disabled>Выберете оценку</option>
-                        <option value="otl">отлично</option>
-                        <option value="hor">хорошо</option>
-                        <option value="udov">удовлетворительно</option>
-                    </select>
+            <div v-if="selectedUser">
+                <div class="max-w-screen-xl flex flex-wrap items-baseline mx-auto p-4 mt-5">
+                    <h5 class="mb-4 mr-4">Оценка за ВКР</h5>
+                    <div class="relative max-w-sm">
+                        <select id="score" v-model="selectedUser.score" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @change="ScoresPush(selectedUser)">
+                            <option disabled>Выберете оценку</option>
+                            <option value="otl">отлично</option>
+                            <option value="hor">хорошо</option>
+                            <option value="udov">удовлетворительно</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="max-w-screen-xl flex flex-wrap items-baseline mx-auto p-4 mt-5">
-                <h5 class="mb-4 mr-4">Выдать диплом о высшем образовании</h5>
-                <div class="relative max-w-sm">
-                    <select id="scoredip" v-model="scoredip" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option selected>Выберете оценку</option>
-                        <option value="wotl">с отличием</option>
-                        <option value="dotl">без отличия</option>
-                    </select>
+                <div class="max-w-screen-xl flex flex-wrap items-baseline mx-auto p-4 mt-5">
+                    <h5 class="mb-4 mr-4">Выдать диплом о высшем образовании</h5>
+                    <div class="relative max-w-sm">
+                        <select id="scoredip" v-model="selectedUser.scoredip" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @change="ScoresPush(selectedUser)">
+                            <option selected>Выберете оценку</option>
+                            <option value="wotl">с отличием</option>
+                            <option value="dotl">без отличия</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
+            </div>  
         </div>
-        <div class="w-full">
-            <h1 class="text-center">Список студентов</h1>
+        <div class="w-full h-96 overflow-auto">
+            <h1 class="text-center mb-3">Список студентов</h1>
+            <ul class="text-center">
+                <li class="text-center p-2 rounded-3xl bg-gray-300 mb-3" v-for="(user, index) in users" :key="index" @click="handleUserClick(index)">{{ index }}</li>
+            </ul>
         </div>
     </div>
     <div class="flex items-center justify-center">
@@ -127,12 +132,14 @@
       Nav,
     },
     data() {
-    return {
-      selectedDate: "",
-      namegospred: "",
-      score: "Выберете оценку",
-      scoredip: "Выберете оценку"
-    };
+        return {
+            namegospred: "",
+            users: {},
+            selectedUser: null,
+        };
+    },
+    mounted() {
+        this.loadstudent();
     },
     methods: {
         async handleFileUpload(event) {
@@ -147,15 +154,43 @@
                 'Content-Type': 'multipart/form-data',
                 },
             });
-
-            console.log('Ответ от бэкенда:', response.data);
+            if (response.data.status === "success") {
+                await this.loadstudent();
+            } else {
+                console.error('Бэкенд вернул неуспешный ответ:', response.data);
+            }
             } catch (error) {
             console.error('Ошибка при отправке файла:', error);
             }
         },
+        async loadstudent() {
+            try{
+                const getresponse = await axios.get('http://127.0.0.1:83/getjsoninfo');
+                this.users = getresponse.data.users;
+            }
+            catch(error){
+                console.log(error)
+            }
+        },
+        handleUserClick(index){
+            this.selectedUser = this.users[index];
+        },
+        async ScoresPush(item){
+            try{
+                const postData = {
+                    student: item.name,
+                    score: item.score,
+                    scoredip: item.scoredip,
+                };
+                const postresponse = await axios.post('http://127.0.0.1:83/getjsoninfo', postData);
+                console.log(postresponse)
+            }catch(error){
+                console.log(error)
+            }
+        },
         handleDownload() {
             const data = {
-                date: this.selectedDate,
+                date: this.$refs.datepicker1.value,
                 namegospred: this.namegospred,
                 score: this.score,
                 scoredip: this.scoredip

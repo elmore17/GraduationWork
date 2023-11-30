@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, url_for, flash, redirect, ses
 from flask_cors import CORS
 import psycopg2
 from pathlib import Path
-from wwdocx import read_docx, create_draft
+from wwdocx import read_docx, create_draft, create_json
+import json
 
 
 app = Flask(__name__)
@@ -64,11 +65,39 @@ def upload_file():
         file_path = downloads_directory / uploaded_file.filename
         uploaded_file.save(file_path)
         output_json = 'output.json'
-        read_docx(file_path, output_json)
-        create_draft(output_json)
+        data_text = read_docx(file_path)
+        create_json(data_text, output_json)
         return {'status': 'success', 'message': 'File uploaded successfully'}
     except Exception as e:
         return {'status': 'error', 'message': str(e)}
+    
+@app.route('/getjsoninfo', methods=['GET', 'POST'])
+def get_json_info():
+    json_file_path = 'output.json'
+    if request.method == 'GET':
+        data_by_student = {}
+        with open(json_file_path, 'r', encoding='utf-8') as json_file:
+            all_data = json.load(json_file)
+            for entry in all_data:
+                student_name = entry['student']
+                score = entry['score']
+                scoredip = entry['scoredip']
+                if student_name not in data_by_student:
+                    data_by_student[student_name] = {'score': score, 'scoredip': scoredip, 'name': student_name}
+        return jsonify({'users': data_by_student})
+    if request.method == 'POST':
+        student = request.json.get('student')
+        score = request.json.get('score')
+        scoredip = request.json.get('scoredip')
+        with open(json_file_path, 'r', encoding='utf-8') as json_file:
+            all_data = json.load(json_file)
+            for entry in all_data:
+                if entry['student'] == student:
+                    entry['score'] = score
+                    entry['scoredip'] = scoredip
+        with open(json_file_path, 'w', encoding='utf-8') as json_file:
+            json.dump(all_data, json_file, ensure_ascii=False, indent=4)
+        return jsonify({'message': 'Successfully'})
     
 
 app.run(host='0.0.0.0', port=83)

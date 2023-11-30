@@ -30,7 +30,9 @@ def create_json(data, json_filename):
             "student": item[58],
             "studentU": item[115],
             "kval": item[121],
-            "spec": item[126]
+            "spec": item[126],
+            "score": "Выберете оценку",
+            "scoredip": "Выберете оценку"
         }
         json_data.append(json_item)
 
@@ -41,7 +43,7 @@ docx_path = 'exprot2.docx'
 all_text_data = read_docx(docx_path)
 
 json_filename = 'output.json'
-create_json(all_text_data, json_filename)
+# create_json(all_text_data, json_filename)
 
 # Вставка данных в шаблон
 def create_draft(data, output_docx_path):
@@ -61,7 +63,8 @@ def create_draft(data, output_docx_path):
             'kval': item.get('kval', ''),
             'spec': item.get('spec', ''),
             'predgos': 'Баранчиков Алексей Иванович',
-            'score': 'отлично',
+            'score': item.get('score', ''),
+            'scoredip': item.get('scoredip', '')
         }
         
         if context['score'] == 'удовлетворительно':
@@ -95,4 +98,4 @@ json_file_path = 'output.json'
 with open(json_file_path, 'r', encoding='utf-8') as json_file:
     all_data = json.load(json_file)
 output_path = 'combined_generated_docx.docx'
-create_draft(all_data, output_path)
+# create_draft(all_data, output_path)
