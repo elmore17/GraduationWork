@@ -67,18 +67,23 @@ def create_draft(data, output_docx_path):
             'scoredip': item.get('scoredip', '')
         }
         
-        if context['score'] == 'удовлетворительно':
+        if context['score'] == 'udov':
+            context['score'] = 'удовлетворительно'
             context['haracteransver1'] = 'Студент показал достаточный уровень подготовки. Недостаточно глубоко изучил и' 
             context['haracteransver2'] = 'проанализировал предметную область. При защите ВКР студент проявил неуверенность,'
             context['haracteransver3'] = 'показал слабое знание вопросов темы, не дал полного аргументированного ответа на'
             context['haracteransver4'] = 'заданные вопросы.'
-        elif context['score'] == 'отлично':
+        elif context['score'] == 'otl':
+            context['score'] = 'отлично'
             context['haracteransver1'] = 'Студент показал высокий уровень подготовки и глубокие системные знания,' 
             context['haracteransver2'] = 'свободно оперирует данными исследования, дал развернутые и полные ответы на'
             context['haracteransver3'] = 'поставленные вопросы'
-        elif context['score'] == 'хорошо':
+        elif context['score'] == 'hor':
+            context['score'] = 'хорошо'
             context['haracteransver1'] = 'Студент показал высокий уровень подготовки и глубокие системные знания,' 
             context['haracteransver2'] = 'но на дополнительные вопросы комиссии были даны неполные ответы.'
+        else:
+            context['score'] = ''
         
         context['ekzscore'] = 'не предусмотрен учебным планом'
         context['nodata'] = '–'
@@ -98,4 +103,4 @@ json_file_path = 'output.json'
 with open(json_file_path, 'r', encoding='utf-8') as json_file:
     all_data = json.load(json_file)
 output_path = 'combined_generated_docx.docx'
-# create_draft(all_data, output_path)
+create_draft(all_data, output_path)

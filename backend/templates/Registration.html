@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация на сайтe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/output.css') }}">
+    <link rel="stylesheet" href="../static/dist/css/output.css">
+</head>
+<body>
+    <div class="container mx-auto grid justify-items-center">
+        <form method="POST" action="/addadmin" class="container w-80 h-96 bg-neutral-200 mt-32 border-2 rounded-3xl p-4 flex flex-col justify-center">
+            <img src="../static/img/logo.svg" alt="Logo" width="64" height="64" class="block m-auto mt-1 mb-11">
+            <h2 class="text-center font-mono">Регистрация</h2>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="font-mono bg-red-400 border-2 text-center">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <input type="login" name="login" class="h-7 border-2 rounded-3xl border-white pl-3 mt-auto font-mono" placeholder="Введите логин:">
+            <input type="password" name="password1" class="h-7 border-2 rounded-3xl border-white mt-auto font-mono" placeholder="Введите пароль:">
+            <input type="password" name="password2" class="h-7 border-2 rounded-3xl border-white mt-auto font-mono" placeholder="Повторите пароль:">
+            <a href="{{url_for('authorization')}}" class="text-center hover:text-blue-400 mt-auto font-mono">Есть аккаунт?</a>
+            <button type="submit" class="border-2 rounded-3xl bg-blue-200 hover:bg-blue-500 mt-auto font-mono">Создать аккаунт</button>
+        </form>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+</body>
+</html>

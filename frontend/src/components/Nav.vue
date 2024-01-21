@@ -26,8 +26,7 @@
     setup(){
     let Links = [
       {name: "Заполнение документа", link: "/home"},
-      {name: "Члены комиссии", link: "/members"},
-      {name: "Черновики", link: "/drafts"},
+      {name: "Члены комиссии", link: "/members"}
     ]
     const isCurrentPage = (link) => {
       return window.location.pathname.endsWith(link);

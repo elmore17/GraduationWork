@@ -37,7 +37,7 @@
             <div class="max-w-screen-xl flex flex-wrap items-baseline mx-auto p-4 mt-5">
                 <h5 class="mb-4 mr-4">Члены Государственной экзаменационной комиссии (фамилия и инициалы)</h5>
                 <div class="relative max-w-sm">
-                    <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                    <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" @click="checkuserecz()">
                     Просмотр
                     </button>
                     <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -65,9 +65,9 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                        Apple MacBook Pro 17"
+                                                <tr v-for="user in usersecz" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                    <th  :key="user.id" scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        {{ user.user_name }}
                                                     </th>
                                                 </tr>
                                             </tbody>
@@ -110,11 +110,11 @@
         <div class="w-full h-96 overflow-auto">
             <h1 class="text-center mb-3">Список студентов</h1>
             <ul class="text-center">
-                <li class="text-center p-2 rounded-3xl bg-gray-300 mb-3" v-for="(user, index) in users" :key="index" @click="handleUserClick(index)">{{ index }}</li>
+                <li class="text-center p-2 rounded-3xl bg-gray-300 hover:bg-blue-600 mb-3 cursor-pointer" v-for="(user, index) in users" :key="index" @click="handleUserClick(index)">{{ index }}</li>
             </ul>
         </div>
     </div>
-    <div class="flex items-center justify-center">
+    <div class="flex items-center justify-center mt-3">
         <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800" @click="handleDownload">
             <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                 Скачать файл
@@ -135,11 +135,12 @@
         return {
             namegospred: "",
             users: {},
+            usersecz: [],
             selectedUser: null,
         };
     },
     mounted() {
-        this.loadstudent();
+        this.checkuserecz();
     },
     methods: {
         async handleFileUpload(event) {
@@ -174,6 +175,15 @@
         },
         handleUserClick(index){
             this.selectedUser = this.users[index];
+        },
+        async checkuserecz(){
+            try{
+                const getresponse = await axios.get('http://127.0.0.1:83/getusers')
+                this.usersecz = getresponse.data.users;
+            }
+            catch(error){
+                console.log(error)
+            }
         },
         async ScoresPush(item){
             try{
