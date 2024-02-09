@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ГЭК</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/output.css') }}">
+    <link rel="stylesheet" href="../static/dist/css/output.css">
+</head>
+<body>
+    <nav class="bg-white border-gray-200 dark:bg-gray-900">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <a class="flex items-center space-x-3 rtl:space-x-reverse">
+            <img src="../static/img/logo.svg" class="h-8" alt="KIS Logo" />
+            <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" class="self-center text-2xl font-semibold whitespace-nowrap flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent font-mono">ГЭК<svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+              </svg>
+            </button>
+            <div id="dropdownNavbar" class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+                    <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white font-mono">Заседаниие кафедры</a>
+                    </li>
+                </ul>
+            </div>
+        </a>
+        <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
+            <span class="sr-only font-mono">Меню</span>
+            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+            </svg>
+        </button>
+        <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+            <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                <li>
+                    <a href="{{url_for('gecpage')}}" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500 font-mono" aria-current="page">Заполнение документа</a>
+                </li>
+                <li>
+                    <a href="{{url_for('commissionpage')}}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent font-mono">Члены комиссии</a>
+                </li>
+                <li>
+                    <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent font-mono">Настройки</a>
+                </li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+    <div class="container mx-auto">
+        <div class="flex items-center justify-center w-full" id="blockInputFile">
+            <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                    </svg>
+                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold font-mono">Нажмите чтобы добавить файл</span> или перенесите его</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">DOCX</p>
+                </div>
+                <input id="dropzone-file" type="file" class="hidden" onchange="InputFile(event)"/>
+            </label>
+        </div> 
+        <p id="pathFile" class="cursor-pointer font-mono hover:text-blue-400" onclick="OpenWinInputFile()"></p>
+    </div>
+    <div class="flex space-around flex-start">
+        <div class="w-full">
+            <div class="max-w-screen-xl flex flex-wrap items-baseline mx-auto p-4 mt-5">
+                <h5 class="mb-4 mr-4 font-mono">Выберете дату</h5>
+                <div class="relative max-w-sm">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                        </svg>
+                    </div>
+                    <input ref="datepicker1" datepicker type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Выберете дату">
+                </div>
+            </div>
+            <div class="max-w-screen-xl flex flex-wrap items-baseline mx-auto p-4 mt-5">
+                <h5 class="mb-4 mr-4 font-mono">Председатель Государственной экзаменационной комиссии</h5>
+                <div class="relative max-w-sm">
+                    <input type="text" id="first_name" class="bg-gray-50 font-mono border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="ФИО" required>
+                    <ul id="usersList" class="autocomplete-list"></ul>
+                </div>
+            </div>
+            <div class="max-w-screen-xl flex flex-wrap items-baseline mx-auto p-4 mt-5">
+                <h5 class="mb-4 mr-4 font-mono">Члены Государственной экзаменационной комиссии (фамилия и инициалы)</h5>
+                <div class="relative max-w-sm">
+                    <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="block font-mono text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" onclick="getUsersTeaching()">
+                    Просмотр
+                    </button>
+                    <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div class="relative p-4 w-full max-w-2xl max-h-full">
+                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white font-mono">
+                                        Просмотр членов Государственной экзаменационной комиссии
+                                    </h3>
+                                    <button type="button" class="text-gray-400 font-mono bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                        </svg>
+                                        <span class="sr-only font-mono">Close modal</span>
+                                    </button>
+                                </div>
+                                <div class="p-4 md:p-5 space-y-4">
+                                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3 font-mono">
+                                                        ФИО
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" id="teaching_staff">
+                                                    <th scope="row" class="px-6 py-4 font-mono font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        Преподы
+                                                    </th>
+                                                </tr> -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="flex items-center font-mono p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                    <button data-modal-hide="default-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Принять</button>
+                                    <button data-modal-hide="default-modal" type="button" class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Отмена</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="GradesStudents">
+                <div class="max-w-screen-xl flex flex-wrap items-baseline mx-auto p-4 mt-5">
+                    <h5 class="mb-4 mr-4 font-mono">Вопросы студенту</h5>
+                    <div class="relative max-w-sm">
+                        <div id="commissionQuestion">
+                        </div>
+                        <button type="button" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onclick="addQuestionSection()">Добавить вопрос</button>
+                        <button type="button" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onclick="removeQuestionSection()">Удалить вопрос</button>
+                    </div>
+                </div>
+                <div class="max-w-screen-xl flex flex-wrap items-baseline mx-auto p-4 mt-5">
+                    <h5 class="mb-4 mr-4 font-mono">Оценка за ВКР</h5>
+                    <div class="relative max-w-sm">
+                        <select id="score" class="bg-gray-50 font-mono border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onchange="WriteScor(event)">
+                            <option disabled>Выберете оценку</option>
+                            <option value="otl">отлично</option>
+                            <option value="hor">хорошо</option>
+                            <option value="udov">удовлетворительно</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="max-w-screen-xl flex flex-wrap items-baseline mx-auto p-4 mt-5">
+                    <h5 class="mb-4 mr-4 font-mono">Выдать диплом о высшем образовании</h5>
+                    <div class="relative max-w-sm">
+                        <select id="scoredip" class="bg-gray-50 font-mono border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onchange="WriteScor(event)">
+                            <option selected>Выберете оценку</option>
+                            <option value="wotl">с отличием</option>
+                            <option value="dotl">без отличия</option>
+                        </select>
+                    </div>
+                </div>
+            </div>  
+        </div>
+        <div class="w-full h-96 overflow-auto mt-5">
+            <h1 class="text-center mb-3 font-mono">Список студентов</h1>
+            <ul class="text-center font-mono" id="studentList" onclick="ReadScoreStudent(event)">
+                <li class="text-center p-2 rounded-3xl font-mono bg-gray-300 hover:bg-blue-600 mb-3 cursor-pointer hidden"></li>
+            </ul>
+        </div>
+    </div>
+    <div class="flex items-center justify-center mt-3">
+        <button class="relative inline-flex font-mono items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                Скачать файл
+            </span>
+        </button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/datepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        //// Оценки студентов ////
+
+        document.getElementById('GradesStudents').style.display = 'none';
+        async function InputFile(event){
+            const fileInput = event.target;
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            try {
+            const response = await axios.post('/upload', formData, {
+                headers: {
+                'Content-Type': 'multipart/form-data',
+                },
+            });
+            if (response.data.status === "success") {
+                document.getElementById('pathFile').style.display = "block";
+                document.getElementById('pathFile').innerText = 'Открытый файл: ' + response.data.filePath;
+                document.getElementById('blockInputFile').style.display = "none";
+                await LoadStudent();
+            } else {
+                console.error('Бэкенд вернул неуспешный ответ:', response.data);
+            }
+            } catch (error) {
+                console.error('Ошибка при отправке файла:', error);
+            }
+        }
+
+        //// Загрузка файла ////
+
+        const OpenWinInputFile = () =>{
+            document.getElementById('blockInputFile').style.display = "flex";
+            document.getElementById('pathFile').style.display = "none";
+        }
+
+        async function LoadStudent(){
+            try{
+                const getresponse = await axios.get('/getjsoninfo');
+                const students = getresponse.data.students;
+                updateStudentList(students);
+            }
+            catch(error){
+                console.log(error)
+            }
+        }
+
+        function updateStudentList(students) {
+            const studentList = document.getElementById('studentList');
+            studentList.innerHTML = '';
+            students.forEach(el => {
+                const li = document.createElement('li');
+                li.className = 'text-center p-2 rounded-3xl bg-gray-300 hover:bg-blue-600 mb-3 cursor-pointer';
+                li.innerText = `${el.name}`;
+                li.setAttribute('data-scores', JSON.stringify(el.score));
+                li.setAttribute('data-scores-diplom', JSON.stringify(el.scoredip));
+                li.setAttribute('data-student-name', el.name);
+                studentList.appendChild(li);
+            });
+        }
+
+        function ReadScoreStudent(event) {
+            const studentElement = event.target;
+            const studentName = studentElement.getAttribute('data-student-name');
+            const scoresData = JSON.parse(studentElement.getAttribute('data-scores'));
+            const scoresDataDiplom = JSON.parse(studentElement.getAttribute('data-scores-diplom'));
+            document.getElementById('score').value = scoresData;
+            document.getElementById('score').setAttribute('data-student-name', studentName)
+            document.getElementById('scoredip').value = scoresDataDiplom;
+            document.getElementById('GradesStudents').style.display = 'block';
+        }
+
+        async function WriteScor(event){
+            const score = document.getElementById('score').value;
+            const scoredip = document.getElementById('scoredip').value;
+            const student = document.getElementById('score').getAttribute('data-student-name');
+            const formData = new FormData();
+            formData.append('score', score);
+            formData.append('student', student);
+            formData.append('scoredip', scoredip);
+            try {
+            const response = await axios.post('/getjsoninfo', formData, {
+                headers: {
+                'Content-Type': 'multipart/form-data',
+                },
+            });
+            if (response.data.status === "success") {
+                await LoadStudent();
+            } else {
+                console.error('Бэкенд вернул неуспешный ответ:', response.data);
+            }
+            } catch (error) {
+                console.error('Ошибка при отправке файла:', error);
+            }
+        }
+
+        ////Работа с комментариями////
+
+        let sectionCount = 0;
+
+        async function getUsers(){
+            try{
+                const getresponse = await axios.get('/getusers');
+                const user = getresponse.data.users;
+                updateSelector(user);
+                teaching_staff_func(user);
+            }
+            catch(error){
+                console.log(error)
+            }
+        }
+
+        function updateSelector(users){
+            const userSelect = document.getElementById('users-' + sectionCount);
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.text = user.user_name;
+                option.value = user.id;
+                userSelect.appendChild(option);
+            });
+        }
+
+        function addQuestionSection() {
+            sectionCount++;
+
+            const questionsSection = document.createElement('div');
+            questionsSection.innerHTML = `
+                <select id="users-${sectionCount}" class="bg-gray-50 mb-4 font-mono border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option selected>Выберете члена комиссии</option>
+                </select>
+                <div class="flex flex-col flex-nowrap items-center">
+                    <div id="questions-container-${sectionCount}" class="w-full"></div>
+                    <div>
+                        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onclick="addQuestion('questions-container-${sectionCount}')">+</button>
+                        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onclick="removeQuestion('questions-container-${sectionCount}')">-</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('commissionQuestion').appendChild(questionsSection);
+            getUsers();
+        }
+
+        function addQuestion(containerId) {
+            const questionsContainer = document.getElementById(containerId);
+            const questionContainer = document.createElement('div');
+            questionContainer.classList.add('w-full', 'mb-4');
+            const newQuestion = document.createElement('input');
+            newQuestion.type = 'text';
+            newQuestion.id = `questions-text-${Date.now()}`;
+            newQuestion.classList.add('p-2.5', 'font-mono', 'w-full', 'text-sm', 'text-gray-900', 'bg-gray-50', 'rounded-lg', 'rounded-s-gray-100', 'border-gray-300', 'focus:ring-blue-500', 'focus:border-blue-500', 'dark:bg-gray-700', 'dark:border-gray-600', 'dark:placeholder-gray-400', 'dark:text-white', 'dark:focus:border-blue-500');
+            newQuestion.placeholder = 'Введите вопрос';
+            newQuestion.required = true;
+            questionContainer.appendChild(newQuestion);
+            questionsContainer.appendChild(questionContainer);
+        }
+
+        function removeQuestion(containerId) {
+            const questionsContainer = document.getElementById(containerId);
+            if (questionsContainer.childElementCount > 0) {
+                questionsContainer.lastChild.remove();
+            }
+        }
+
+        function removeQuestionSection() {
+            const questionsSection = document.getElementById('commissionQuestion');
+            if (questionsSection.childElementCount > 0) {
+                questionsSection.lastChild.remove();
+            }
+        }
+
+
+        ////Работа с преподавателями////
+        async function getUsersTeaching(){
+            try{
+                const getresponse = await axios.get('/getusers');
+                const user = getresponse.data.users;
+                teaching_staff_func(user);
+            }
+            catch(error){
+                console.log(error)
+            }
+        }
+
+        function teaching_staff_func(users){
+            const tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <th scope="row" class="px-6 py-4 font-mono font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        ${user.user_name}
+                    </th>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        ////Работа с Председатель Государственной экзаменационной комиссии////
+        async function fillUsersList() {
+            try {
+                const getresponse = await axios.get('/getusers');
+                const users = getresponse.data.users;
+
+                const usersList = document.getElementById('usersList');
+                usersList.innerHTML = '';
+
+                users.forEach(user => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = user.user_name;
+                    listItem.addEventListener('click', () => {
+                        document.getElementById('first_name').value = user.user_name;
+                        usersList.innerHTML = '';
+                    });
+                    usersList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        document.getElementById('first_name').addEventListener('input', async function() {
+            const inputValue = this.value;           
+            if (inputValue.trim() === '') {
+                document.getElementById('usersList').innerHTML = '';
+            } else {
+                await fillUsersList();
+            }
+        });
+
+    </script>
+</body>
+</html>
