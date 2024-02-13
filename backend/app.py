@@ -88,6 +88,7 @@ def add_admin():
 @app.route('/upload', methods=['POST'])
 def upload_file():
     try:
+        #Загрузка файла и сохранение в директорию Downloads
         uploaded_file = request.files['file']
         downloads_directory = Path.home() / 'Downloads'
         file_path = downloads_directory / uploaded_file.filename
@@ -95,6 +96,45 @@ def upload_file():
         output_json = 'output.json'
         data_text = read_docx(file_path)
         create_json(data_text, output_json)
+
+        #Добавление информиции из docx в базу данных
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            for item in data_text:
+                # Проверка наличия направления в таблице direction
+                cursor.execute("SELECT id FROM direction WHERE name_direction = %s", (item[2],))
+                existing_direction = cursor.fetchone()
+                if existing_direction is None:
+                    cursor.execute("INSERT INTO direction (name_direction) VALUES (%s)", (item[2],))
+                    conn.commit()
+
+                #Проверка наличия студента в БД
+                cursor.execute("SELECT id FROM students WHERE name = %s AND title_gradual_work = %s", (item[26], item[29]))
+                existing_student = cursor.fetchone()
+                if existing_student is None:
+                    cursor.execute("INSERT INTO students (name, title_gradual_work) VALUES (%s, %s)", (item[26], item[29]))
+                    conn.commit()
+
+                #Проверка наличия научного руководителя в БД
+                cursor.execute("SELECT id FROM scientific_adviser WHERE name_adviser = %s AND role = %s", (item[37], item[41]))
+                existing_student = cursor.fetchone()
+                if existing_student is None:
+                    cursor.execute("INSERT INTO scientific_adviser (name_adviser, role) VALUES (%s, %s)", (item[37], item[41]))
+                    conn.commit()
+                
+                #Проверка наличия квалификации в БД
+                cursor.execute("SELECT id FROM level_education WHERE name_level_education = %s", (item[121], ))
+                existing_level_education = cursor.fetchone()
+                if existing_level_education is None:
+                    cursor.execute("INSERT INTO level_education (name_level_education) VALUES (%s)", (item[121],))
+                    conn.commit()
+
+                #Проверка наличия специальностей в БД
+                cursor.execute("SELECT id FROM speciality WHERE name_speciality = %s", (item[126],))
+                existing_speciality = cursor.fetchone()
+                if existing_speciality is None:
+                    cursor.execute("INSERT INTO speciality (name_speciality) VALUES (%s)", (item[126], ))
+                    conn.commit()
         return {'status': 'success', 'message': 'File uploaded successfully', 'filePath': str(file_path)}
     except Exception as e:
         return {'status': 'error', 'message': str(e)}
