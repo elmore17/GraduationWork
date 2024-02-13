@@ -108,18 +108,18 @@ def upload_file():
                     cursor.execute("INSERT INTO direction (name_direction) VALUES (%s)", (item[2],))
                     conn.commit()
 
+                #Проверка наличия научного руководителя в БД
+                cursor.execute("SELECT id FROM scientific_adviser WHERE name_adviser = %s AND role = %s", (item[37], item[41]))
+                existing_scientific_adviser = cursor.fetchone()
+                if existing_scientific_adviser is None:
+                    cursor.execute("INSERT INTO scientific_adviser (name_adviser, role) VALUES (%s, %s)", (item[37], item[41]))
+                    conn.commit()
+
                 #Проверка наличия студента в БД
                 cursor.execute("SELECT id FROM students WHERE name = %s AND title_gradual_work = %s", (item[26], item[29]))
                 existing_student = cursor.fetchone()
                 if existing_student is None:
-                    cursor.execute("INSERT INTO students (name, title_gradual_work) VALUES (%s, %s)", (item[26], item[29]))
-                    conn.commit()
-
-                #Проверка наличия научного руководителя в БД
-                cursor.execute("SELECT id FROM scientific_adviser WHERE name_adviser = %s AND role = %s", (item[37], item[41]))
-                existing_student = cursor.fetchone()
-                if existing_student is None:
-                    cursor.execute("INSERT INTO scientific_adviser (name_adviser, role) VALUES (%s, %s)", (item[37], item[41]))
+                    cursor.execute("INSERT INTO students (name, title_gradual_work, id_scientific_adviser) VALUES (%s, %s, %s)", (item[26], item[29], existing_scientific_adviser))
                     conn.commit()
                 
                 #Проверка наличия квалификации в БД
@@ -134,6 +134,13 @@ def upload_file():
                 existing_speciality = cursor.fetchone()
                 if existing_speciality is None:
                     cursor.execute("INSERT INTO speciality (name_speciality) VALUES (%s)", (item[126], ))
+                    conn.commit()
+
+                #Таблица для шаблонизации
+                cursor.execute("SELECT id FROM graduate_work WHERE id_student = %s", (existing_student,))
+                existing_graduate_work = cursor.fetchone()
+                if existing_graduate_work is None:
+                    cursor.execute("INSERT INTO graduate_work (id_student, id_direction, id_scientific_adviser, id_level_education, id_speciality) VALUES (%s, %s, %s, %s, %s)", (existing_student, existing_direction, existing_scientific_adviser, existing_level_education, existing_speciality))
                     conn.commit()
         return {'status': 'success', 'message': 'File uploaded successfully', 'filePath': str(file_path)}
     except Exception as e:
@@ -192,18 +199,25 @@ def get_users():
             user_list.append(user_dict)
         return jsonify({'users': user_list})
         
-# @app.route('/addusers', methods=['POST'])
-# def add_users():
-#     if request.method == 'POST':
-#         user_name = request.json.get('user_name')
-#         post = request.json.get('post')
-#         cursor.execute('SELECT * FROM users WHERE user_name = %s', (user_name,))
-#         existing_user = cursor.fetchone()
-#         if existing_user:
-#             return jsonify({'message': 'User already exists'}), 400
-#         cursor.execute('INSERT INTO users (user_name, post) VALUES (%s, %s)', (user_name, post))
-#         conn.commit()
-#         return jsonify({'message': 'Successfully'})
+@app.route('/addusers', methods=['POST'])
+def add_users():
+    if request.method == 'POST':
+        user_name = request.form.get('fullname')
+        post = request.form.get('post')
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+
+            # Проверка наличия пользователя в таблице users_commission
+            cursor.execute('SELECT * FROM users_commission WHERE user_name = %s', (user_name,))
+            existing_user = cursor.fetchone()
+            if existing_user:
+                return jsonify({'status': 'User already exists'}), 400
+
+            # Вставка нового пользователя в таблицу users_commission
+            cursor.execute('INSERT INTO users_commission (user_name, post) VALUES (%s, %s)', (user_name, post))
+            conn.commit()
+
+        return jsonify({'status': 'success'})
     
 
     

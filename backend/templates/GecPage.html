@@ -41,6 +41,9 @@
                 <li>
                     <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent font-mono">Настройки</a>
                 </li>
+                <li>
+                    <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent font-mono">История</a>
+                </li>
             </ul>
         </div>
         </div>
@@ -111,11 +114,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" id="teaching_staff">
-                                                    <th scope="row" class="px-6 py-4 font-mono font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                        Преподы
-                                                    </th>
-                                                </tr> -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -283,7 +281,6 @@
                 const getresponse = await axios.get('/getusers');
                 const user = getresponse.data.users;
                 updateSelector(user);
-                teaching_staff_func(user);
             }
             catch(error){
                 console.log(error)
